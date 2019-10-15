@@ -62,11 +62,17 @@ export default class App extends React.PureComponent<IProps, IState> {
       asset_name: "",
       asset_value: 0
     }
-    const action: IAssetAction = {
-      type: ActionType.create_asset,
-      asset: newAsset
-    }
-    window.CS.clientAction(action);
+
+    axios.post('http://localhost:8080/assets/add', newAsset)
+    .then(res => {
+      const action: IAssetAction = {
+        type: ActionType.create_asset,
+        asset: newAsset
+      }
+      window.CS.clientAction(action);
+    });
+
+  
   }
 }
 
@@ -74,7 +80,7 @@ export interface IAssetsLoadedAction extends IAction{
   assets:IAssetData[]
 }
 
-function assetsReadActionCreator(){
+export function assetsReadActionCreator(){
   return function (dispatch:any){
     const uiAction: IAction = {
       type:ActionType.server_called
